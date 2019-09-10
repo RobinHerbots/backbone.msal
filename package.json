@@ -24,10 +24,8 @@
     "url": "https://github.com/RobinHerbots/backbone.msal/issues"
   },
   "homepage": "https://github.com/RobinHerbots/backbone.msal#readme",
-  "devDependencies": {
-    "msal": "^1.1.3"
-  },
   "dependencies": {
-    "backbone": "^1.4.0"
+    "backbone": "^1.4.0",
+    "msal": "^1.1.3"
   }
 }
