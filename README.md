@@ -1,5 +1,7 @@
 # backbone.msal
-Microsoft Authentication Library (MSAL) for Backbone
+Microsoft Authentication Library (MSAL) for Backbone  
+https://github.com/AzureAD/microsoft-authentication-library-for-js/wiki
+https://github.com/AzureAD/microsoft-authentication-library-for-js/wiki/FAQs
 
 ## Install
 
@@ -35,3 +37,16 @@ let mainRouting = Backbone.MsalRouter.extend({
     
 ```
 
+
+### Calling protected endpoints
+https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-angular/README.md
+
+```
+framework: {
+    protectedResourceMap : [
+        [
+            ['https://your_api_url',['Scope(s) defined in the azure portal']] 
+        ]
+    ]
+}
+```
