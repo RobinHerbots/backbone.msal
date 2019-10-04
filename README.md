@@ -43,8 +43,8 @@ https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/
 
 ```
 framework: {
-    protectedResourceMap : [
+    protectedResourceMap : new Map( [
            ['https://your_api_url',['Scope(s) defined in the azure portal']]
-    ]
+    ])
 }
 ```
