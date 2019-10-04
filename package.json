@@ -1,6 +1,6 @@
 {
   "name": "backbone.msal",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Microsoft Authentication Library (MSAL) for Backbone",
   "main": "./lib/backbone.msal.js",
   "scripts": {
