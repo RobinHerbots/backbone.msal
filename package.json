@@ -1,6 +1,6 @@
 {
   "name": "backbone.msal",
-  "version": "0.0.14-beta.1",
+  "version": "0.0.15",
   "description": "Microsoft Authentication Library (MSAL) for Backbone",
   "main": "./dist/backbone.msal.js",
   "scripts": {
@@ -27,7 +27,7 @@
   "dependencies": {
     "backbone": "^1.4.0",
     "msal": "^1.1.3",
-    "underscore": "latest"
+    "underscore": "^1.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.4",

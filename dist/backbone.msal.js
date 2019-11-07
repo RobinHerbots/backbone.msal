@@ -3,7 +3,7 @@
  * https://github.com/RobinHerbots/backbone.msal#readme
  * Copyright (c) 2010 - 2019 
  * Licensed under the MIT license
- * Version: 0.0.14-beta.1
+ * Version: 0.0.15
  */
 !function webpackUniversalModuleDefinition(root, factory) {
     if ("object" == typeof exports && "object" == typeof module) module.exports = factory(require("underscore"), require("backbone"), require("msal"), require("jquery")); else if ("function" == typeof define && define.amd) define([ "underscore", "backbone", "msal", "jquery" ], factory); else {
