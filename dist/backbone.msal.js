@@ -18,7 +18,8 @@
             var _arguments = arguments, _this = this;
             options = options || {};
             var that = this;
-            options.routes && (this.routes = options.routes), this._bindRoutes(), this._initAuth().then(function(response) {
+            this.preinitialize.apply(this, arguments), options.routes && (this.routes = options.routes), 
+            this._bindRoutes(), this._initAuth().then(function(response) {
                 that.initialize.apply(that, _arguments);
             });
         }, Backbone.MsalRouter.prototype = Backbone.Router.prototype, Backbone.MsalRouter.extend = Backbone.Router.extend, 
@@ -71,20 +72,19 @@
             enumerable: !0,
             configurable: !1
         });
-        var originSync = Backbone.sync;
-        Backbone.sync = function(method, model, options) {
+        var originAjax = $.ajax;
+        $.ajax = function(url, options) {
             options = options || {};
-            var that = this, authContext = Backbone.sync.authContext, scopes = authContext.getScopesForEndpoint(options.url || ($.isFunction(model.url) ? model.url() : model.url)), dfd = $.Deferred();
+            var that = this, authContext = Backbone.sync.authContext, scopes = authContext ? authContext.getScopesForEndpoint(url) : null, dfd = $.Deferred();
             return null !== scopes ? authContext.acquireTokenSilent({
                 scopes: scopes
             }).then(function(response) {
                 options.headers = options.headers || {}, $.extend(options.headers, {
                     Authorization: "Bearer " + response.accessToken
-                }), originSync.call(that, method, model, options).then(dfd.resolve, dfd.reject);
+                }), originAjax.call(that, url, options).then(dfd.resolve, dfd.reject);
             }, function(err) {
                 authContext.getLogger().error(err), dfd.reject(err);
-            }) : originSync.call(that, method, model, options).then(dfd.resolve, dfd.reject), 
-            dfd.promise();
+            }) : originAjax.call(that, url, options).then(dfd.resolve, dfd.reject), dfd.promise();
         }, module.exports = {
             Msal: Msal,
             Backbone: Backbone
