@@ -3,7 +3,7 @@
  * https://github.com/RobinHerbots/backbone.msal#readme
  * Copyright (c) 2010 - 2019 
  * Licensed under the MIT license
- * Version: 0.0.19
+ * Version: 0.0.21
  */
 !function webpackUniversalModuleDefinition(root, factory) {
     if ("object" == typeof exports && "object" == typeof module) module.exports = factory(require("underscore"), require("backbone"), require("msal"), require("jquery")); else if ("function" == typeof define && define.amd) define([ "underscore", "backbone", "msal", "jquery" ], factory); else {
@@ -40,12 +40,12 @@
             configurable: !1
         }), Backbone.MsalRouter = Backbone.MsalRouter.extend({
             _initAuth: function _initAuth() {
-                var _this2 = this;
+                var _this2 = this, that = this;
                 return new Promise(function(resolve, reject) {
                     _this2.msalConfig ? ($.isFunction(_this2.msalConfig) && (_this2.msalConfig = _this2.msalConfig()), 
                     _this2.authContext = new Msal.UserAgentApplication(_this2.msalConfig), Backbone.sync.authContext = _this2.authContext, 
                     _this2.authContext.handleRedirectCallback(function(err, response) {
-                        err ? reject(err) : resolve(response);
+                        err ? (that.authContext.getLogger().error(err), reject(err)) : resolve(response);
                     }), _this2.authContext.isCallback(window.location.hash) || resolve()) : resolve();
                 });
             },
