@@ -3,7 +3,7 @@
  * https://github.com/RobinHerbots/backbone.msal#readme
  * Copyright (c) 2010 - 2019 
  * Licensed under the MIT license
- * Version: 1.0.0
+ * Version: 1.0.1
  */
 !function webpackUniversalModuleDefinition(root, factory) {
     if ("object" == typeof exports && "object" == typeof module) module.exports = factory(require("underscore"), require("backbone"), require("msal"), require("jquery")); else if ("function" == typeof define && define.amd) define([ "underscore", "backbone", "msal", "jquery" ], factory); else {
@@ -78,14 +78,14 @@
         };
         var originXMLHttpRequest_send = XMLHttpRequest.prototype.send;
         XMLHttpRequest.prototype.send = function() {
-            var xhr = this, authContext = Backbone.sync.authContext, scopes = authContext ? authContext.getScopesForEndpoint(this._url) : null;
-            if (null === scopes) return originXMLHttpRequest_send.apply(this, arguments);
+            var args = arguments, xhr = this, authContext = Backbone.sync.authContext, scopes = authContext ? authContext.getScopesForEndpoint(this._url) : null;
+            if (null === scopes) return originXMLHttpRequest_send.apply(this, args);
             authContext.acquireTokenSilent({
                 scopes: scopes
             }).then(function(response) {
                 return 1 == xhr.readyState ? xhr.setRequestHeader("Authorization", "Bearer " + response.accessToken) : xhr.onreadystatechange = function() {
                     1 == xhr.readyState && xhr.setRequestHeader("Authorization", "Bearer " + response.accessToken);
-                }, originXMLHttpRequest_send.apply(xhr, arguments);
+                }, originXMLHttpRequest_send.apply(xhr, args);
             }, function(err) {
                 authContext.getLogger().error(err);
             });
