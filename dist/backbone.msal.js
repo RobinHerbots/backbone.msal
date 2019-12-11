@@ -3,7 +3,7 @@
  * https://github.com/RobinHerbots/backbone.msal#readme
  * Copyright (c) 2010 - 2019 
  * Licensed under the MIT license
- * Version: 0.0.21
+ * Version: 1.0.0
  */
 !function webpackUniversalModuleDefinition(root, factory) {
     if ("object" == typeof exports && "object" == typeof module) module.exports = factory(require("underscore"), require("backbone"), require("msal"), require("jquery")); else if ("function" == typeof define && define.amd) define([ "underscore", "backbone", "msal", "jquery" ], factory); else {
@@ -13,13 +13,6 @@
 }(window, function(__WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__3__, __WEBPACK_EXTERNAL_MODULE__4__) {
     return modules = [ function(module, exports, __webpack_require__) {
         "use strict";
-        function _typeof(obj) {
-            return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function _typeof(obj) {
-                return typeof obj;
-            } : function _typeof(obj) {
-                return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-            }, _typeof(obj);
-        }
         var _ = __webpack_require__(1), Backbone = __webpack_require__(2), Msal = __webpack_require__(3), $ = __webpack_require__(4);
         Backbone.MsalRouter = function(options) {
             var _arguments = arguments, _this = this;
@@ -79,27 +72,23 @@
             enumerable: !0,
             configurable: !1
         });
-        var originAjax = $.ajax;
-        $.ajax = function(url, options) {
-            "object" === _typeof(url) && (options = url, url = options.url), options = options || {};
-            var that = this, authContext = Backbone.sync.authContext, scopes = authContext ? authContext.getScopesForEndpoint(url) : null, dfd = $.Deferred();
-            return null !== scopes ? authContext.acquireTokenSilent({
+        var originXMLHttpRequest_open = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function() {
+            return this._url = arguments[1], originXMLHttpRequest_open.apply(this, arguments);
+        };
+        var originXMLHttpRequest_send = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.send = function() {
+            var xhr = this, authContext = Backbone.sync.authContext, scopes = authContext ? authContext.getScopesForEndpoint(this._url) : null;
+            if (null === scopes) return originXMLHttpRequest_send.apply(this, arguments);
+            authContext.acquireTokenSilent({
                 scopes: scopes
             }).then(function(response) {
-                options.headers = options.headers || {}, $.extend(options.headers, {
-                    Authorization: "Bearer " + response.accessToken
-                }), originAjax.call(that, url, options).then(function() {
-                    dfd.resolveWith(this, arguments);
-                }, function() {
-                    dfd.rejectWith(this, arguments);
-                });
+                return 1 == xhr.readyState ? xhr.setRequestHeader("Authorization", "Bearer " + response.accessToken) : xhr.onreadystatechange = function() {
+                    1 == xhr.readyState && xhr.setRequestHeader("Authorization", "Bearer " + response.accessToken);
+                }, originXMLHttpRequest_send.apply(xhr, arguments);
             }, function(err) {
-                authContext.getLogger().error(err), dfd.reject(err);
-            }) : originAjax.call(that, url, options).then(function() {
-                dfd.resolveWith(this, arguments);
-            }, function() {
-                dfd.rejectWith(this, arguments);
-            }), dfd;
+                authContext.getLogger().error(err);
+            });
         }, module.exports = {
             Msal: Msal,
             Backbone: Backbone
