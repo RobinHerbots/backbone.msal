@@ -32,7 +32,12 @@ let mainRouting = Backbone.MsalRouter.extend({
     before: function (params, next) { return next(); },
     //extra after routing
     after: function () { },
-    
+    Headers: [
+        { name: headername1, value: headervalue1 }
+        { name: headername2, value: headervalue2 }
+            ...
+        { name: headernameN, value: headervalueN }
+    ]
     //continue normal setup for a router
     
 ```
@@ -47,4 +52,16 @@ framework: {
            ['https://your_api_url',['Scope(s) defined in the azure portal']]
     ])
 }
+```
+
+### Headers
+Headers to inject in every xhr call
+
+```
+ Headers: [
+        { name: headername1, value: headervalue1 }
+        { name: headername2, value: headervalue2 }
+            ...
+        { name: headernameN, value: headervalueN }
+    ]
 ```
